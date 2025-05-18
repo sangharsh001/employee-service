@@ -28,7 +28,7 @@ import com.employee_service.service.EmployeeServiceImpl;
 import com.itextpdf.text.Image;
 //import com.itextpdf.text.Paragraph;
 //import com.itextpdf.text.pdf.PdfWriter;
-import com.salary_service.entity.Salary;
+// import com.salary_service.entity.Salary;
 //import com.itextpdf.text.pdf.PdfWriter;
 //import jakarta.servlet.http.HttpServletResponse;
 
