@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import  com.salary_service.entity.Salary;
+// import  com.salary_service.entity.Salary;
 @FeignClient(name = "salary-service" )
 public interface SalaryClient {
 //	@GetMapping("/salary/{employeeId}")
