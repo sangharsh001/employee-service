@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Employee Documents and Family</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            width: 100%;
+            margin: 0;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-input {
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #eaeaea;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .upload-btn {
+            padding: 6px 14px;
+            margin: 4px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .nested-family-table th, .nested-family-table td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .nested-family-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .nested-family-table input {
+            width: 100%;
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .document-family-row {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .document-family-column {
+            width: 100%;
+        }
+
+        td button + button {
+            margin-top: 5px;
+        }
+
+       /*  input[type=file] {
+            width: 98px; /* Set the width to 100% of the parent container }*/
+        
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<br>	
+
+     <h1>Employee Documents and Family Details</h1>
+
+    <!-- Search Bar -->
+  <!--   <div class="search-bar">
+       <input type="text" id="searchInput" placeholder="Search by name or ID..." onkeyup="searchTable()">
+    </div> -->
+
+<div class="search-bar">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search by name or ID..." onkeyup="searchTable()" />
+  </div>
+    <table id="employeeTable">
+        <thead>
+            <tr>
+                <th>Emp ID</th>
+                <th>Emp Name</th>
+                <th>Employee Documents</th>
+                <th>Employee Family</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="d : ${emplist}">
+                <td th:text="${d.eid}"></td>
+                <td th:text="${d.ename}"></td>
+                <td>
+                    <div class="document-family-row">
+                        <div class="document-family-column">
+                            <table class="nested-family-table">
+                                <thead>
+                                    <tr>
+                                        <th>Document</th>
+                                        <th>Upload</th>
+                                        <th>View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Aadhaar Card Row -->
+                                    <tr>
+                                        <td>Aadhar Card</td>
+                                        <td >
+                                            <form th:action="@{/employee/upload-docs}" method="POST" enctype="multipart/form-data" th:id="'fileFormAadhaar_' + ${d.eid}">
+                                                <input type="hidden"  name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="aadhaarPic" width="10px"  th:attr="onchange='submitForm(event, this, \'fileFormAadhaar_' + ${d.eid} + '\')'"  th:style="${documentsStatus[d.eid]?.hasAadhaar} ? 'background-color:green; ' : 'background-color:red;'"  />
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/employee/aadhaar-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Pan Card Row -->
+                                    <tr>
+                                        <td>Pan Card</td>
+                                        <td>
+                                            <form th:action="@{/employee/upload-docs}" method="POST" enctype="multipart/form-data" th:id="'fileFormPan_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="panPic" width="10px"  th:attr="onchange='submitForm(event, this, \'fileFormPan_' + ${d.eid} + '\')'" th:style="${documentsStatus[d.eid]?.hasPan} ? 'background-color:green;color:green; ' : 'color:black; '" />
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/employee/pan-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                    <!-- 10th Marks Row -->
+                                    <tr>
+                                        <td>10th Marks</td>
+                                        <td>
+                                            <form th:action="@{/employee/upload-docs}" method="POST" enctype="multipart/form-data" th:id="'fileFormSslc_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="sslcPic" width="10px"  th:attr="onchange='submitForm(event, this, \'fileFormSslc_' + ${d.eid} + '\')'"  th:style="${documentsStatus[d.eid]?.hasSslc} ? 'background-color:green;' : 'background-color:red;'"/>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/employee/sslc-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Employee Photo Row -->
+                                    <tr>
+                                        <td>Employee Photo</td>
+                                        <td>
+                                            <form th:action="@{/employee/upload-docs}" method="POST" enctype="multipart/form-data" th:id="'fileFormPhoto_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="employeePhoto" width="10px"  th:attr="onchange='submitForm(event, this, \'fileFormPhoto_' + ${d.eid} + '\')'" th:style="${documentsStatus[d.eid]?.hasEmployeePhoto} ? 'background-color:green;' : 'background-color:red;'"  />
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/employee/photo-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="document-family-row">
+                        <div class="document-family-column">
+                            <table class="nested-family-table">
+                                <thead>
+                                    <tr>
+                                        <th>Family Member</th>
+                                        <th>Aadhar</th>
+                                        <th>Photo</th>
+                                        <th>Pan Card</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Family Member Rows -->
+                                    <tr>
+                                        <td>Father</td>
+                                        <td>
+                                            <form th:action="@{/employee/upload-father-docs}" method="POST" enctype="multipart/form-data" th:id="'fatheraadhar_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                               <!--  <input type="file" name="aadhaarPic" width="10px"  th:attr="onchange='submitForm(event, this, \'fatheraadhar_' + ${d.eid} + '\')'" /> -->
+                                               <input type="file" name="aadhaarPic" width="10px"  th:attr="onchange='submitForm(event, this, \'fatheraadhar_' + ${d.eid} + '\')'"  th:style="${fatherdocumentsStatus[d.eid]?.fatherHasAadhaar} ? 'background-color:green;' : 'background-color:red;'" />
+                                               
+                                            </form>
+                                           <form th:action="@{/employee/fatheradhar-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                         <td>
+                                            <form th:action="@{/employee/upload-father-docs}" method="POST" enctype="multipart/form-data" th:id="'fatherpan_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="panPic" width="10px" id="fileInput" th:attr="onchange='submitForm(event, this, \'fatherpan_' + ${d.eid} + '\')'" th:style="${fatherdocumentsStatus[d.eid]?.fatherHasPan} ? 'background-color:green;' : 'background-color:red;'"  />
+                                            </form>
+                                           <form th:action="@{/employee/fatherpan-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                         <td>
+                                            <form th:action="@{/employee/upload-father-docs}" method="POST" enctype="multipart/form-data" th:id="'fatherphoto_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="employeePhoto" width="10px"  th:attr="onchange='submitForm(event, this, \'fatherphoto_' + ${d.eid} + '\')'" th:style="${fatherdocumentsStatus[d.eid]?.fatherHasPhoto} ? 'background-color:green;' : 'background-color:red;'"  />
+                                            </form>
+                                           <form th:action="@{/employee/fatherphoto-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                     <tr>
+                                        <td>Mother</td>
+                                        <td>
+                                            <form th:action="@{/employee/upload-mother-docs}" method="POST" enctype="multipart/form-data" th:id="'motheraadhar_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="aadhaarPic" width="10px" th:attr="onchange='submitForm(event, this, \'motheraadhar_' + ${d.eid} + '\')'" th:style="${motherdocumentsStatus[d.eid]?.hasAadhaar} ? 'background-color:green;' : 'background-color:red;'"  />
+                                            </form>
+                                           <form th:action="@{/employee/motheradhar-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                         <td>
+                                            <form th:action="@{/employee/upload-mother-docs}" method="POST" enctype="multipart/form-data" th:id="'motherpan_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="panPic" width="10px"  th:attr="onchange='submitForm(event, this, \'motherpan_' + ${d.eid} + '\')'" th:style="${motherdocumentsStatus[d.eid]?.hasAadhaar} ? 'background-color:green;' : 'background-color:red;'"  />
+                                            </form>
+                                           <form th:action="@{/employee/motherpan-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                         <td>
+                                            <form th:action="@{/employee/upload-mother-docs}" method="POST" enctype="multipart/form-data" th:id="'motherphoto_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="employeePhoto" width="10px" th:attr="onchange='submitForm(event, this, \'motherphoto_' + ${d.eid} + '\')'" th:style="${motherdocumentsStatus[d.eid]?.hasAadhaar} ? 'background-color:green;' : 'background-color:red;'"  />
+                                            </form>
+                                           <form th:action="@{/employee/motherphoto-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    
+                                     <tr>
+                                        <td>Siblings</td>
+                                        <td>
+                                            <form th:action="@{/employee/upload-siblings-docs}" method="POST" enctype="multipart/form-data" th:id="'siblingsaadhar_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="aadhaarPic" width="10px" id="fileInput" th:attr="onchange='submitForm(event, this, \'siblingsaadhar_' + ${d.eid} + '\')'" th:style="${siblingsdocumentsStatus[d.eid]?.hasAadhaar} ? 'background-color:green;' : 'background-color:red;'"  />
+                                            </form>
+                                           <form th:action="@{/employee/siblingsadhar-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                         <td>
+                                            <form th:action="@{/employee/upload-siblings-docs}" method="POST" enctype="multipart/form-data" th:id="'siblingspan_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="panPic" width="10px" id="fileInput" th:attr="onchange='submitForm(event, this, \'siblingspan_' + ${d.eid} + '\')'"  th:style="${siblingsdocumentsStatus[d.eid]?.hasAadhaar} ? 'background-color:green;' : 'background-color:red;'" />
+                                            </form>
+                                           <form th:action="@{/employee/siblingspan-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                         <td>
+                                            <form th:action="@{/employee/upload-siblings-docs}" method="POST" enctype="multipart/form-data" th:id="'siblingsphoto_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="employeePhoto" width="10px" id="fileInput" th:attr="onchange='submitForm(event, this, \'siblingsphoto_' + ${d.eid} + '\')'" th:style="${siblingsdocumentsStatus[d.eid]?.hasAadhaar} ? 'background-color:green;' : 'background-color:red;'"  />
+                                            </form>
+                                           <form th:action="@{/employee/siblingsphoto-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Function to handle AJAX form submission
+        function submitForm(event, fileInput, formId)
+        {
+            event.preventDefault(); // Prevent the default form submission
+            
+            var form = document.getElementById(formId);
+            var formData = new FormData(form);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", form.action, true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    alert("File uploaded successfully!");
+                } else {
+                    alert("File upload failed.");
+                }
+            };
+
+            xhr.send(formData);
+        }
+
+        // Function to filter employee names or IDs
+
+/*              <tr>
+                                        <td>10th Marks</td>
+                                        <td>
+                                            <form th:action="@{/employee/upload-docs}" method="POST" enctype="multipart/form-data" th:id="'fileFormSslc_' + ${d.eid}">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <input type="file" name="sslcPic" width="10px" id="fileInput" th:attr="onchange='submitForm(event, this, \'fileFormSslc_' + ${d.eid} + '\')'" />
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/employee/sslc-as-pdf}" method="get">
+                                                <input type="hidden" name="employeeId" th:value="${d.eid}" />
+                                                <button type="submit" class="upload-btn">View</button>
+                                            </form>
+                                        </td>
+                                    </tr> */
+        
+                                    function searchTable() {
+                                        const input = document.getElementById("searchInput");
+                                        const filter = input.value.toUpperCase();
+                                        const table = document.getElementById("employeeTable");
+                                        const tbodies = table.tBodies;  // get all tbody elements
+
+                                        for (let t = 0; t < tbodies.length; t++) {
+                                            const rows = tbodies[t].rows; // all rows in this tbody
+
+                                            for (let i = 0; i < rows.length; i++) {
+                                                const row = rows[i];
+                                                const text = row.textContent.toUpperCase();
+
+                                                if (text.indexOf(filter) > -1) {
+                                                    row.style.display = "";
+                                                } else {
+                                                    row.style.display = "none";
+                                                }
+                                            }
+                                        }
+                                    }
+
+
+                              
+
+
+
+
+    </script>
+
+</body>
+</html>

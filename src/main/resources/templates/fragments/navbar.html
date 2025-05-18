@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+
+
+
+</head>
+
+<body>
+
+<!-- fragments/navbar.html -->
+<th:block th:fragment="navbar">
+  <nav class="navbar" role="navigation" aria-label="Primary Navigation">
+    <div class="navbar-container">
+      <a href="#" class="logo" aria-label="Homepage">MyApp</a>
+      
+      <button id="menu-toggle" class="menu-toggle" aria-controls="nav-links" aria-expanded="false" aria-label="Toggle menu">
+        <span class="hamburger"></span>
+      </button>
+      
+      <ul class="nav-links" id="nav-links">
+      
+      
+          <li>
+  <a th:href="@{/employee/addemployee}" 
+     th:classappend="${activePage == 'addemployee'} ? 'active' : ''">
+     AddEmployee
+  </a>
+  </li>
+      
+        <li>
+   <a th:href="@{/employee/getallemployeesdeatails}" 
+     th:classappend="${activePage == ' allemployees'} ? 'active' : ''">
+     All Employee 
+  </a>
+  
+  
+  
+ 
+</li>
+      <!--   <li><a th:href="@{/employee/a}" th:classappend="${#httpServletRequest.requestURI == '/'} ? 'active' : ''">Employee Details</a></li> -->
+         <li>
+  <a th:href="@{/salary/all}" 
+     th:classappend="${activePage == 'salarys'} ? 'active' : ''">
+   Employee Salary 
+  </a>
+</li>
+      
+      <li>
+  <a th:href="@{/employee/allemp}" 
+     th:classappend="${activePage == 'employee'} ? 'active' : ''">
+     Employee Document
+  </a>
+  </li>
+
+
+   
+        <!-- <li><a th:href="@{/about}" th:classappend="${#httpServletRequest.requestURI.startsWith('/about')} ? 'active' : ''">Employee Salry</a></li>
+        <li><a th:href="@{/contact}" th:classappend="${#httpServletRequest.requestURI.startsWith('/contact')} ? 'active' : ''">Contact</a></li> -->
+      </ul>
+    </div>
+  </nav>
+
+  <style>
+    :root {
+      --navbar-bg: #1e1e1e;
+      --navbar-text: #fff;
+      --navbar-hover: #ffcc00;
+      --navbar-shadow: rgba(0,0,0,0.3);
+      --transition-speed: 0.3s;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .navbar {
+      background-color: var(--navbar-bg);
+      box-shadow: 0 2px 5px var(--navbar-shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+    }
+
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--navbar-text);
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      transition: max-height var(--transition-speed) ease-in-out;
+    }
+
+    .nav-links li a {
+      text-decoration: none;
+      color: var(--navbar-text);
+      font-size: 1rem;
+      font-weight: 500;
+      position: relative;
+      padding: 0.25rem 0;
+      user-select: none;
+      transition: color 0.2s ease-in-out;
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a.active {
+      color: var(--navbar-hover);
+    }
+
+    /* Underline effect for active or hovered links */
+    .nav-links li a.active::after,
+    .nav-links li a:hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 100%;
+      height: 2px;
+      background-color: var(--navbar-hover);
+      border-radius: 2px;
+    }
+
+    /* Hamburger Menu */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 30px;
+      height: 25px;
+      position: relative;
+      z-index: 1100;
+    }
+
+    .hamburger,
+    .hamburger::before,
+    .hamburger::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background-color: var(--navbar-text);
+      border-radius: 2px;
+      transition: transform 0.3s ease, top 0.3s ease, bottom 0.3s ease, opacity 0.3s ease;
+    }
+
+    .hamburger {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .hamburger::before {
+      top: 0;
+    }
+
+    .hamburger::after {
+      bottom: 0;
+    }
+
+    /* When menu is active (open) */
+    .menu-toggle.active .hamburger {
+      background-color: transparent;
+    }
+
+    .menu-toggle.active .hamburger::before {
+      top: 50%;
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle.active .hamburger::after {
+      bottom: 50%;
+      transform: rotate(-45deg);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--navbar-bg);
+        flex-direction: column;
+        overflow: hidden;
+        max-height: 0;
+        gap: 0;
+        transition: max-height var(--transition-speed) ease-in-out;
+        box-shadow: 0 4px 8px var(--navbar-shadow);
+        border-top: 1px solid #333;
+      }
+
+      .nav-links.show {
+        max-height: 400px; /* enough to show all items */
+      }
+
+      .nav-links li {
+        width: 100%;
+      }
+
+      .nav-links li a {
+        display: block;
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+    }
+  </style>
+
+  <script>
+    const toggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    toggle.addEventListener('click', () => {
+      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isExpanded));
+      toggle.classList.toggle('active');
+      navLinks.classList.toggle('show');
+    });
+
+    // Optional: close menu when clicking a nav link (mobile)
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (navLinks.classList.contains('show')) {
+          toggle.classList.remove('active');
+          navLinks.classList.remove('show');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  </script>
+</th:block>
+	
+
+
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salary Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-6">
+  <div class="flex justify-between items-center mb-6 flex-wrap">
+    <h2 class="text-2xl font-bold w-full sm:w-auto">Salary Details</h2>
+    <div class="space-x-2 mt-4 sm:mt-0">
+      <label for="quarter" class="font-medium">Sort by:</label>
+      <select id="quarter" class="p-2 border rounded w-full sm:w-auto">
+        <option>Jan - March</option>
+        <option>Apr - June</option>
+        <option>July - Sep</option>
+        <option>Oct - Dec</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full table-auto border-collapse border border-gray-300">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="border border-gray-300 px-4 py-2 text-left">Employee ID</th>
+          <th class="border border-gray-300 px-4 py-2 text-left">Employee Name</th>
+          <th class="border border-gray-300 px-4 py-2 text-left">Jan</th>
+          <th class="border border-gray-300 px-4 py-2 text-left">Feb</th>
+          <th class="border border-gray-300 px-4 py-2 text-left">March</th>
+          <th class="border border-gray-300 px-4 py-2 text-left">Advance</th>
+          <th class="border border-gray-300 px-4 py-2 text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="salary-row" data-months="Jan,Feb,March">
+          <td class="border border-gray-300 px-4 py-2">EP 12</td>
+          <td class="border border-gray-300 px-4 py-2">Laing</td>
+          <td class="border border-gray-300 px-4 py-2">
+            <input type="text" value="10000" class="w-full border rounded px-2 py-1" />
+          </td>
+          <td class="border border-gray-300 px-4 py-2">
+            <input type="text" value="10000" class="w-full border rounded px-2 py-1" />
+          </td>
+          <td class="border border-gray-300 px-4 py-2">
+            <input type="text" value="10000" class="w-full border rounded px-2 py-1" />
+          </td>
+          <td class="border border-gray-300 px-4 py-2">
+            <input type="text" value="2000" class="w-full border rounded px-2 py-1" />
+          </td>
+          <td class="border border-gray-300 px-4 py-2 text-center">
+            <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded mr-2">Edit</button>
+            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded submit-btn">Submit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const quarterSelect = document.getElementById("quarter");
+      const row = document.querySelector(".salary-row");
+
+      const quarterMap = {
+        "Jan - March": ["Jan", "Feb", "March"],
+        "Apr - June": ["Apr", "May", "June"],
+        "July - Sep": ["July", "Aug", "Sep"],
+        "Oct - Dec": ["Oct", "Nov", "Dec"]
+      };
+
+      // Function to filter columns based on selected quarter
+      function filterColumns() {
+        const selected = quarterSelect.value;
+        const monthsToShow = quarterMap[selected];
+
+        const ths = document.querySelectorAll("thead th");
+        const tds = row.querySelectorAll("td");
+
+        // Hide salary columns (Jan, Feb, March or other quarter)
+        for (let i = 2; i <= 4; i++) {
+          ths[i].style.display = "none";
+          tds[i].style.display = "none";
+        }
+
+        // Show only selected quarter's months
+        monthsToShow.forEach((month, index) => {
+          const colIndex = 2 + index;
+          ths[colIndex].textContent = month;
+          ths[colIndex].style.display = "table-cell";
+          tds[colIndex].style.display = "table-cell";
+        });
+      }
+
+      // Add event listener to the submit button
+      document.querySelectorAll(".submit-btn").forEach(button => {
+        button.addEventListener("click", function () {
+          const inputs = row.querySelectorAll("input"); // Select all input fields in the row
+          inputs.forEach(input => {
+            input.disabled = true; // Disable each input field
+          });
+        });
+      });
+
+      // Change listener for sorting by quarter
+      quarterSelect.addEventListener("change", filterColumns);
+      filterColumns(); // initial call
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee Table</title>
+    <style>
+        /* Your existing styles remain unchanged */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f7f9fc;
+            padding: 30px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        #searchBox {
+            display: block;
+            margin: 0 auto 20px auto;
+            padding: 10px;
+            width: 50%;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background-color: #343a40;
+            color: white;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .action-buttons a {
+            padding: 6px 12px;
+            margin-right: 5px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .btn-view { background-color: #17a2b8; }
+        .btn-edit { background-color: #ffc107; }
+        .btn-delete { background-color: #dc3545; }
+        .btn-delete:hover { background-color: #c82333; }
+        .btn-edit:hover { background-color: #e0a800; }
+        .btn-view:hover { background-color: #138496; }
+
+        #toast {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div> 
+<h2>Employee Details</h2>
+
+<input type="text" id="searchBox" placeholder="Search employees...">
+
+<table id="employeeTable">
+    <thead>
+    <tr>
+        <th>EID</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Hire Date</th>
+        <th>Job Title</th>
+        <th>Salary</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody id="employeeBody">
+    <tr th:each="emp : ${allempslist}" th:id="'emp-row-' + ${emp.eid}">
+        <td th:text="${emp.eid}"></td>
+        <td th:text="${emp.ename}"></td>
+        <td th:text="${emp.phone}"></td>
+        <td th:text="${emp.email}"></td>
+        <td th:text="${emp.hiredate}"></td>
+        <td th:text="${emp.jobTitle}"></td>
+        <td th:text="${emp.salary}"></td>
+        <td class="action-buttons">
+          <!--   <a th:href="@{'/employee/view/' + ${emp.eid}}" class="btn-view">View</a> -->
+            <a th:href="@{'/employee/edit/' + ${emp.eid}}" class="btn-edit">Edit</a>
+            <a href="javascript:void(0);" class="btn-delete"
+               th:attr="data-id=${emp.eid}"
+               onclick="deleteEmployee(this)">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div id="toast">Employee deleted successfully</div>
+
+<script>
+    // 🔍 Live Search Filter
+    document.getElementById("searchBox").addEventListener("keyup", function () {
+        let query = this.value.toLowerCase();
+        const rows = document.querySelectorAll("#employeeBody tr");
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(query) ? "" : "none";
+        });
+    });
+
+    // 🗑️ AJAX Delete with Toast Notification
+    function deleteEmployee(btn) {
+        const eid = btn.getAttribute("data-id");
+        if (confirm("Are you sure you want to delete this employee?")) {
+            fetch(`/employee/deleterec/${eid}`, {
+                method: "DELETE"
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById("emp-row-" + eid).remove();
+                    showToast("Employee deleted successfully");
+                } else {
+                    showToast("Failed to delete employee", true);
+                }
+            })
+            .catch(() => showToast("Error connecting to server", true));
+        }
+    }
+
+    // ✅ Toast Function
+    function showToast(message, isError = false) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.style.backgroundColor = isError ? "#dc3545" : "#28a745";
+        toast.style.display = "block";
+        setTimeout(() => toast.style.display = "none", 3000);
+    }
+</script>
+
+</body>
+</html>
