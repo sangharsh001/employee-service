@@ -5,8 +5,8 @@ spring:
   application:
     name: employee-service
   datasource:
-    url: jdbc:mysql://localhost:3306/employee_db
-    username: root
+    url: jdbc:mysql://192.168.0.102:3306/employee_db  # ✅ Change from localhost to your MySQL IP
+    username: sangharsh
     password: Sangharsh724
   jpa:
     hibernate:
@@ -17,10 +17,11 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: https://employee-registry-3yo1.onrender.com/eureka  # ✅ Use public Eureka URL
+    register-with-eureka: true
+    fetch-registry: true
+
 info:
- app:
- name: employee-service
- version: 1.0.0
-
-
+  app:
+    name: employee-service
+    version: 1.0.0
