@@ -34,11 +34,7 @@ import com.employee_service.service.SalaryServiceImpl;
 import com.itextpdf.text.Image;
 //import com.itextpdf.text.Paragraph;
 //import com.itextpdf.text.pdf.PdfWriter;
-<<<<<<< HEAD
-// import com.salary_service.entity.Salary;
-=======
-//import com.salary_service.entity.Salary;
->>>>>>> b4707b2 (Initial commit)
+
 //import com.itextpdf.text.pdf.PdfWriter;
 //import jakarta.servlet.http.HttpServletResponse;
 /*

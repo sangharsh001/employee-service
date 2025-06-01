@@ -1,11 +1,11 @@
-services:
-  - type: web
-    name: employee-service
-    env: docker
-    plan: free
-    region: oregon
-    dockerfilePath: ./Dockerfile
-    healthCheckPath: /actuator/health
-    envVars:
-      - key: SPRING_PROFILES_ACTIVE
-        value: default
+#services:
+#  - type: web
+#    name: employee-service
+#    env: docker
+#    plan: free
+#    region: oregon
+#    dockerfilePath: ./Dockerfile
+#    healthCheckPath: /actuator/health
+#    envVars:
+#      - key: SPRING_PROFILES_ACTIVE
+#        value: default

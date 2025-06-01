@@ -50,18 +50,16 @@
 		<!--<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-<<<<<<< HEAD
+
 		</dependency>
 		<dependency>
     <groupId>org.projectlombok</groupId>
     <artifactId>lombok</artifactId>
-    <version>1.18.26</version> <!-- Latest stable at the time of writing -->
+    <version>1.18.26</version> 
     <scope>provided</scope>
 </dependency>
-
-=======
 		</dependency>-->
->>>>>>> b4707b2 (Initial commit)
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -98,7 +96,7 @@
     </dependency>
 <<<<<<< HEAD
     
-<!--     <dependency>
+   <dependency>
 =======
     -->
  <!--   <dependency>
@@ -109,9 +107,9 @@
 	
 <<<<<<< HEAD
     </dependency> -->
-=======
-    </dependency>-->
->>>>>>> b4707b2 (Initial commit)
+
+ 
+
 <!--
 <dependency>
     <groupId>org.springframework.boot</groupId>
