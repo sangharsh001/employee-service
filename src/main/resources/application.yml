@@ -7,8 +7,8 @@ spring:
   datasource:
     url: jdbc:mysql://mysql-employeedb-employeemanagement.g.aivencloud.com:12585/defaultdb?useSSL=true&requireSSL=true
     username: avnadmin
-      # Replace with your actual password or use env var
-  jpa:
+    password: ${EMPLOYEE_DB_PASS}  # Replace with your actual password or use env var
+   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
