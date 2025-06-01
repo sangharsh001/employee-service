@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+#spring:
+#  application:
+#    name: employee-service
+#  datasource:
+#    url: jdbc:mysql://mysql-employeedb-employeemanagement.g.aivencloud.com:12585/defaultdb?useSSL=true&requireSSL=true
+#    username: avnadmin
+#      # Replace with your actual password or use env var
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    database-platform: org.hibernate.dialect.MySQLDialect
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: https://employee-registry-3yo1.onrender.com/eureka
+#    register-with-eureka: true
+#    fetch-registry: true
+#
+#info:
+#  app:
+#    name: employee-service
+#    version: 1.0.0
