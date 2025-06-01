@@ -877,17 +877,17 @@ public class EmployeeController {
 //        return "redirect:/employee/getallemployeesdeatails"; // reload employee list
 //    }
 
-//    @DeleteMapping("/deleterec/{eid}")
-//    @ResponseBody
-//    public ResponseEntity<String> deleteEmp(@PathVariable int eid) {
-//        try {
-//            deleteSalary(eid);
-//        } catch (FeignException.NotFound ex) {
-//            // Log or ignore if already deleted
-//        }
-//        emprepo.deleteById(eid);
-//        return ResponseEntity.ok("Deleted");
-//    }
+    @DeleteMapping("/deleterec/{eid}")
+    @ResponseBody
+  public ResponseEntity<String> deleteEmp(@PathVariable int eid) {
+       try {
+            deleteSalary(eid);
+       } catch (FeignException.NotFound ex) {
+            // Log or ignore if already deleted
+       }
+       emprepo.deleteById(eid);
+       return ResponseEntity.ok("Deleted");
+   }
     
     @GetMapping("/edit/{id}")
     public String updateempById(@PathVariable int id, Model model) {
