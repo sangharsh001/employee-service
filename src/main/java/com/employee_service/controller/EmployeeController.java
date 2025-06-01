@@ -882,7 +882,7 @@ public class EmployeeController {
   public ResponseEntity<String> deleteEmp(@PathVariable int eid) {
        try {
             deleteSalary(eid);
-       } catch (FeignException.NotFound ex) {
+       } catch (NullPointerException ex) {
             // Log or ignore if already deleted
        }
        emprepo.deleteById(eid);
