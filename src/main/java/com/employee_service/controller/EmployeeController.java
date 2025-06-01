@@ -4,7 +4,9 @@ package com.employee_service.controller;
 
 //import com.employee_managemnet.employee_dto.EmployeeDTO;
 
-import com.employee_service.client.SalaryClient;
+//import com.employee_service.client.SalaryClient;
+
+
 
 
 
@@ -17,23 +19,31 @@ import com.employee_service.entity.EmployeeDocument;
 import com.employee_service.entity.EmployeeDocumentDTO;
 import com.employee_service.entity.FatherDocument;
 import com.employee_service.entity.MotherDocument;
+import com.employee_service.entity.Salary;
+import com.employee_service.entity.SalaryListWrapper;
 import com.employee_service.entity.SiblingsDocument;
 import com.employee_service.repo.EmployeeDocumentRepository;
 import com.employee_service.repo.EmployeeRepo;
 import com.employee_service.repo.FatherDocumentRepo;
 import com.employee_service.repo.MotherDocumentRepo;
+import com.employee_service.repo.SalaryRepo;
 import com.employee_service.repo.SiblingsDocumentRepo;
 import com.employee_service.service.EmployeeServiceImpl;
+import com.employee_service.service.SalaryServiceImpl;
 //import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 //import com.itextpdf.text.Paragraph;
 //import com.itextpdf.text.pdf.PdfWriter;
+<<<<<<< HEAD
 // import com.salary_service.entity.Salary;
+=======
+//import com.salary_service.entity.Salary;
+>>>>>>> b4707b2 (Initial commit)
 //import com.itextpdf.text.pdf.PdfWriter;
 //import jakarta.servlet.http.HttpServletResponse;
-
+/*
 import feign.FeignException;
-import jakarta.ws.rs.GET;
+import jakarta.ws.rs.GET;*/
 
 //import com.salary_service.entity.Salary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +57,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -63,8 +74,8 @@ public class EmployeeController {
     private EmployeeServiceImpl empservice;
   @Autowired
   private EmployeeRepo emprepo;
-    @Autowired
-    private SalaryClient salaryClient;
+//    @Autowired
+//    private SalaryClient salaryClient;
     @Autowired
     private EmployeeDocumentRepository docsrepo;
   @Autowired
@@ -870,17 +881,17 @@ public class EmployeeController {
 //        return "redirect:/employee/getallemployeesdeatails"; // reload employee list
 //    }
 
-    @DeleteMapping("/deleterec/{eid}")
-    @ResponseBody
-    public ResponseEntity<String> deleteEmp(@PathVariable int eid) {
-        try {
-            salaryClient.deleteSalary(eid);
-        } catch (FeignException.NotFound ex) {
-            // Log or ignore if already deleted
-        }
-        emprepo.deleteById(eid);
-        return ResponseEntity.ok("Deleted");
-    }
+//    @DeleteMapping("/deleterec/{eid}")
+//    @ResponseBody
+//    public ResponseEntity<String> deleteEmp(@PathVariable int eid) {
+//        try {
+//            deleteSalary(eid);
+//        } catch (FeignException.NotFound ex) {
+//            // Log or ignore if already deleted
+//        }
+//        emprepo.deleteById(eid);
+//        return ResponseEntity.ok("Deleted");
+//    }
     
     @GetMapping("/edit/{id}")
     public String updateempById(@PathVariable int id, Model model) {
@@ -913,6 +924,149 @@ public class EmployeeController {
         }
     }
 
+	@Autowired
+	SalaryServiceImpl salimpl;
+//	@Autowired
+//	EmployeeClient employeeClient;
+	@Autowired
+	SalaryRepo salaryRepository;
+//	@GetMapping("/addsalary")
+//	public String addSalary(Model model)
+//	{ 
+//		model.addAttribute("salary",new Salary());
+//		return "viewsalarys";
+//	}
+	
+//	@PostMapping("/savesalary")
+//	public String saveSalary(@ModelAttribute Salary sal)
+//	{
+//		salimpl.addSalary(sal);
+//		return "redirect:/salary/all";
+//	}
+
+	@GetMapping("/all")
+	public String getAllEmployeeSalaries(Model model) {
+
+	    List<EmployeeDTO> employees = empservice.getAllEmployees();
+	    List<Salary> salaryList = new ArrayList<>();
+
+	    for (EmployeeDTO employee : employees) {
+	        Salary salary = salaryRepository.findByEid(employee.getEid());
+
+	        if (salary == null) {
+	            salary = new Salary();
+	            salary.setEid(employee.getEid());
+	            salary.setEname(employee.getEname());
+	            salary.setJan("Na");
+	            salary.setFeb("Na");
+	            salary.setMar("Na");
+	            salary.setApr("Na");
+	            salary.setMay("Na");
+	            salary.setJune("Na");
+	            salary.setJuly("Na");
+	            salary.setAug("Na");
+	            salary.setSep("Na");
+	            salary.setOct("Na");
+	            salary.setNov("Na");
+	            salary.setDec("Na");
+	            salary.setAdvancc("Na"); 
+	        }
+
+	        salaryList.add(salary);
+	    }
+
+	    SalaryListWrapper wrapper = new SalaryListWrapper();
+	    wrapper.setSalaryList(salaryList);
+	    model.addAttribute("salaryListWrapper", wrapper);
+	    model.addAttribute("activePage", "salarys");
+	    return "viewsalarys";
+	}
+
+//	
+//	@GetMapping("/view")
+//    public String showSalaryPage(Model model) {
+//        SalaryListWrapper wrapper = new SalaryListWrapper();
+//        wrapper.setSalaryList(salaryRepository.findAll());
+//        model.addAttribute("salaryListWrapper", wrapper);
+//        return "viewsalarys"; // Thymeleaf HTML file name
+//    }
+
+    @PostMapping("/savesalary")
+    public String saveSalary(@ModelAttribute SalaryListWrapper salaryListWrapper) {
+        salaryRepository.saveAll(salaryListWrapper.getSalaryList());
+        return "redirect:/employee/all"; // Redirect to avoid form resubmission
+    }
+   
+//    @DeleteMapping("/deleteslary/{id}")
+//    public void deleteSalary(@PathVariable("id") int id)
+//    {
+//    	
+//     salaryRepository.deleteById(id);
+//     }
+//    
+//    @DeleteMapping("/deleteslary/{id}")
+//    public ResponseEntity<String> deleteSalary(@PathVariable("id") int id) {
+//        if (salaryRepository.existsById(id)) {
+//            salaryRepository.deleteById(id);
+//            return ResponseEntity.ok("Deleted");
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Salary ID not found");
+//        }
+//    }
+
+    
+//    @DeleteMapping("/deleteslary/{id}")
+//    public ResponseEntity<String> deleteSalary(@PathVariable("id") int id) {
+//        if (salaryRepository.existsById(id)) {
+//            try {
+//                salaryRepository.deleteById(id);
+//                return ResponseEntity.ok("Salary deleted");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                                     .body("Failed to delete salary: " + e.getMessage());
+//            }
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                                 .body("Salary not found");
+//        }
+//    }
+    @DeleteMapping("/deleteSalary/{id}")
+    public ResponseEntity<Void> deleteSalary(@PathVariable int id) {
+        if (!salaryRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        salaryRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+    
+    
+    @GetMapping("/admin")
+    public String adminPage()
+    {
+    	return "adminlogin";
+    }
+
+
+
+        @PostMapping("/adminlogin")
+        public String getAdmin(@RequestParam("username") String username,
+                               @RequestParam("apassword") String password) {
+            if ("admin@gmail.com".equals(username) && "1234".equals(password)) {
+                return "redirect:/employee/allemp"; // Assuming you have this page
+            } else {
+                return "redirect:/login?error"; // Redirect back with error param
+            }
+        }
+
+        @GetMapping("/login")
+        public String showLoginPage() {
+            return "login"; // Return login.jsp or login.html
+        }
+
+   
+
+    
 
     
     

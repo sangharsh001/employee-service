@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salary Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-6">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<br>
+<div class="mb-4 flex justify-center items-center space-x-2">
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search by Employee ID or Name..."
+    class="w-full sm:w-80 p-2 border rounded"
+  />
+  <button
+    type="button"
+    onclick="triggerSearch()"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+  >
+    Search
+  </button>
+</div>
+	
+
+ <form th:action="@{/employee/savesalary}" th:object="${salaryListWrapper}" method="post" id="salaryForm">
+
+    <div class="flex justify-between items-center mb-6 flex-wrap">
+      <h2 class="text-2xl font-bold w-full sm:w-auto">Salary Details</h2>
+      <div class="space-x-2 mt-4 sm:mt-0">
+        <label for="quarter" class="font-medium">Sort by:</label>
+        <select id="quarter" name="selectedQuarter" class="p-2 border rounded w-full sm:w-auto">
+          <option th:selected="${selectedQuarter == 'Jan - March'}">Jan - March</option>
+          <option th:selected="${selectedQuarter == 'Apr - June'}">Apr - June</option>
+          <option th:selected="${selectedQuarter == 'July - Sep'}">July - Sep</option>
+          <option th:selected="${selectedQuarter == 'Oct - Dec'}">Oct - Dec</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto border-collapse border border-gray-300">
+        <thead class="bg-gray-200 text-sm text-gray-700">
+          <tr>
+            <th class="border px-4 py-2">Employee ID</th>
+            <th class="border px-4 py-2">Employee Name</th>
+            <th class="border px-4 py-2" data-month="Jan">Jan</th>
+            <th class="border px-4 py-2" data-month="Feb">Feb</th>
+            <th class="border px-4 py-2" data-month="Mar">Mar</th>
+            <th class="border px-4 py-2" data-month="Apr">Apr</th>
+            <th class="border px-4 py-2" data-month="May">May</th>
+            <th class="border px-4 py-2" data-month="June">June</th>
+            <th class="border px-4 py-2" data-month="July">July</th>
+            <th class="border px-4 py-2" data-month="Aug">Aug</th>
+            <th class="border px-4 py-2" data-month="Sep">Sep</th>
+            <th class="border px-4 py-2" data-month="Oct">Oct</th>
+            <th class="border px-4 py-2" data-month="Nov">Nov</th>
+            <th class="border px-4 py-2" data-month="Dec">Dec</th>
+            <th class="border px-4 py-2">Advance</th>
+             <th class="border px-4 py-2">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr th:each="salary, stat : ${salaryListWrapper.salaryList}" class="bg-white even:bg-gray-50">
+            <td class="border px-4 py-2">
+              <input type="text" th:field="*{salaryList[__${stat.index}__].eid}" class="w-full p-1 border rounded" readonly />
+            </td>
+            <td class="border px-4 py-2">
+              <input type="text" th:field="*{salaryList[__${stat.index}__].ename}" class="w-full p-1 border rounded" readonly />
+            </td>
+            <td class="border px-4 py-2" data-month="Jan"><input type="number" th:field="*{salaryList[__${stat.index}__].jan}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="Feb"><input type="number" th:field="*{salaryList[__${stat.index}__].feb}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="Mar"><input type="number" th:field="*{salaryList[__${stat.index}__].mar}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="Apr"><input type="number" th:field="*{salaryList[__${stat.index}__].apr}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="May"><input type="number" th:field="*{salaryList[__${stat.index}__].may}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="June"><input type="number" th:field="*{salaryList[__${stat.index}__].june}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="July"><input type="number" th:field="*{salaryList[__${stat.index}__].july}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="Aug"><input type="number" th:field="*{salaryList[__${stat.index}__].aug}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="Sep"><input type="number" th:field="*{salaryList[__${stat.index}__].sep}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="Oct"><input type="number" th:field="*{salaryList[__${stat.index}__].oct}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="Nov"><input type="number" th:field="*{salaryList[__${stat.index}__].nov}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2" data-month="Dec"><input type="number" th:field="*{salaryList[__${stat.index}__].dec}" class="w-full p-1 border rounded" /></td>
+            <td class="border px-4 py-2"><input type="number" th:field="*{salaryList[__${stat.index}__].advancc}" class="w-full p-1 border rounded" /></td>
+        <td> 
+    <div class="mt-4">
+  <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Save All Changes</button>
+</div>
+
+    </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  
+  </form>
+
+<script type="text/javascript">
+
+document.getElementById("salaryForm").addEventListener("submit", function(event) {
+	  event.preventDefault();
+	  const form = this;
+	  const formData = new FormData(form);
+
+	  fetch(form.action, {
+	    method: "POST",
+	    body: formData
+	  })
+	  .then(response => {
+	    if (response.ok) {
+	      alert("Salary details saved successfully!");
+	    } else {
+	      alert("Error saving salary details.");
+	    }
+	  });
+	});
+
+
+  // Search filter
+ 
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+      const empIdInput = row.querySelector('input[name$=".eid"]');
+      const empNameInput = row.querySelector('input[name$=".ename"]');
+      const empId = empIdInput?.value.toLowerCase() || '';
+      const empName = empNameInput?.value.toLowerCase() || '';
+      const match = empId.includes(searchTerm) || empName.includes(searchTerm);
+      row.style.display = match ? '' : 'none';
+    });
+  });
+
+
+</script>
+  
+</body>
+</html>

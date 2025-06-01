@@ -14,12 +14,15 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.MySQLDialect
 
+<<<<<<< HEAD
 eureka:
   client:
     service-url:
       defaultZone: https://employee-registry-3yo1.onrender.com/eureka
     register-with-eureka: true
     fetch-registry: true
+=======
+>>>>>>> b4707b2 (Initial commit)
 
 info:
   app:

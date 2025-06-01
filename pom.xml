@@ -47,9 +47,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+<<<<<<< HEAD
 		</dependency>
 		<dependency>
     <groupId>org.projectlombok</groupId>
@@ -58,6 +59,9 @@
     <scope>provided</scope>
 </dependency>
 
+=======
+		</dependency>-->
+>>>>>>> b4707b2 (Initial commit)
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -88,22 +92,38 @@
     <version>5.5.13.4</version>
 </dependency>
     
-  <dependency>
+<!--  <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-openfeign</artifactId>
     </dependency>
+<<<<<<< HEAD
     
 <!--     <dependency>
+=======
+    -->
+ <!--   <dependency>
+>>>>>>> b4707b2 (Initial commit)
     <groupId>com.salary-service</groupId>
 	<artifactId>salary-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	
+<<<<<<< HEAD
     </dependency> -->
+=======
+    </dependency>-->
+>>>>>>> b4707b2 (Initial commit)
 <!--
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
 </dependency>-->
+
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.26</version> <!-- Latest stable at the time of writing -->
+    <scope>provided</scope>
+</dependency>
 
 	</dependencies>
 	<dependencyManagement>
@@ -149,9 +169,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				
 			</plugin>
 		</plugins>
 	</build>
+	
 
 </project>

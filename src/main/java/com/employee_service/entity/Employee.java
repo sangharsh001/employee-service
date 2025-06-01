@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Employee {
 	
 	@Id 
-	@GeneratedValue(strategy =GenerationType.IDENTITY )
+	
 	private long eid;
 	private String ename;
 	private long phone;
