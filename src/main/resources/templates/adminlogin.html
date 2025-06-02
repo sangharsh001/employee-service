@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Admin Login</title>
@@ -73,7 +73,8 @@
         .error {
             color: red;
             font-size: 14px;
-            margin-top: 5px;
+            margin-top: 10px;
+            text-align: center;
         }
     </style>
 </head>
@@ -81,18 +82,22 @@
 
 <div class="login-container">
     <h2>Admin Login</h2>
-    <form th:action="@{/employee/adminlogin}" method="post">
+    <form th:action="@{/employee/admin}" method="post">
         <div class="form-group">
-            <label for="email">Admin Email</label>
+            <label for="username">Admin Email</label>
             <input type="email" id="username" name="username" placeholder="Enter email" required>
         </div>
 
         <div class="form-group">
             <label for="password">Admin Password</label>
-            <input type="password" id="apassword" name="apassword" placeholder="Enter password" required>
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
         </div>
 
         <button type="submit" class="login-btn">Login</button>
+
+        <!-- Show error message -->
+        <div th:if="${param.error}" class="error">Invalid email or password</div>
+        <div th:if="${param.logout}" class="error" style="color: green;">You have been logged out.</div>
     </form>
 </div>
 

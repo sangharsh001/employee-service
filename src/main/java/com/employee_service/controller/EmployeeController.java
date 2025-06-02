@@ -888,6 +888,14 @@ public class EmployeeController {
        emprepo.deleteById(eid);
        return ResponseEntity.ok("Deleted");
    }
+
+	/*
+	 * public ResponseEntity<String> deleteEmp(@PathVariable int eid) { try {
+	 * deleteSalary(eid); } catch (NullPointerException e) { // Log or ignore if
+	 * already deleted } emprepo.deleteById(eid); return
+	 * ResponseEntity.ok("Deleted"); }
+	 */
+//>>>>>>> e4ac0bf (Updated employee service logic, removed SalaryClient, added security package)
     
     @GetMapping("/edit/{id}")
     public String updateempById(@PathVariable int id, Model model) {
@@ -1037,30 +1045,39 @@ public class EmployeeController {
     }
     
     
+//    @GetMapping("/admin")
+//    public String adminPage()
+//    {
+//    	return "adminlogin";
+//    }
+//
+//
+//
+//        @PostMapping("/adminlogin")
+//        public String getAdmin(@RequestParam("username") String username,
+//                               @RequestParam("apassword") String password) {
+//            if ("admin@gmail.com".equals(username) && "1234".equals(password)) {
+//                return "redirect:/employee/allemp"; // Assuming you have this page
+//            } else {
+//                return "redirect:/login?error"; // Redirect back with error param
+//            }
+//        }
+//
+//        @GetMapping("/login")
+//        public String showLoginPage() {
+//            return "login"; // Return login.jsp or login.html
+//        }
+//
+//   
     @GetMapping("/admin")
-    public String adminPage()
-    {
-    	return "adminlogin";
+    public String adminLoginPage() {
+        return "adminlogin"; // Thymeleaf template name without .html
     }
-
-
-
-        @PostMapping("/adminlogin")
-        public String getAdmin(@RequestParam("username") String username,
-                               @RequestParam("apassword") String password) {
-            if ("admin@gmail.com".equals(username) && "1234".equals(password)) {
-                return "redirect:/employee/allemp"; // Assuming you have this page
-            } else {
-                return "redirect:/login?error"; // Redirect back with error param
-            }
-        }
-
-        @GetMapping("/login")
-        public String showLoginPage() {
-            return "login"; // Return login.jsp or login.html
-        }
-
-   
+	/*
+	 * @GetMapping("/allemp") public String allEmployeesPage() { return
+	 * "redirect:/employee/allemp"; // Replace with your actual employee dashboard
+	 * view }
+	 */
 
     
 
