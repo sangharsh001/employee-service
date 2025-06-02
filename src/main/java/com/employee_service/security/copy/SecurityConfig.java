@@ -1,6 +1,7 @@
 package com.employee_service.security.copy;
-//package com.employee_service.security;
 
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,11 +14,17 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    @Value("${ADMIN_USERNAME}")
+    private String adminUsername;
+
+    @Value("${ADMIN_PASSWORD}")
+    private String adminPassword; // must be bcrypt encoded
+
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails admin = User.withDefaultPasswordEncoder()
-            .username("admin@gmail.com")
-            .password("1234")
+        UserDetails admin = User.builder()
+            .username(adminUsername)
+            .password(adminPassword) // already encoded
             .roles("ADMIN")
             .build();
 
